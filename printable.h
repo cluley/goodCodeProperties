@@ -53,31 +53,29 @@ private:
 };
 
 class proxy {
+private:
+    std::ofstream file_;
+    const Printable* printable_;
 public:
     proxy(std::ofstream& file, const Printable* printable)
         : file_(std::move(file)), printable_(printable) {}
 
     void asHTML() {
-        if (printable_->getFormat() != Printable::Format::kHTML)
-            throw std::runtime_error("Invalid format!");
-        else
-            file_ << printable_->print();
+        checkAndPrint(Printable::Format::kHTML);
     }
     void asText() {
-        if (printable_->getFormat() != Printable::Format::kText)
-            throw std::runtime_error("Invalid format!");
-        else
-            file_ << printable_->print();
+        checkAndPrint(Printable::Format::kText);
     }
     void asJSON() {
-        if (printable_->getFormat() != Printable::Format::kJSON)
+        checkAndPrint(Printable::Format::kJSON);
+    }
+private:
+    void checkAndPrint(Printable::Format format) {
+        if (printable_->getFormat() != format)
             throw std::runtime_error("Invalid format!");
         else
             file_ << printable_->print();
     }
-private:
-    std::ofstream file_;
-    const Printable* printable_;
 };
 
 proxy saveTo(std::ofstream& file, const Printable* printable)
