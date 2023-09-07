@@ -1,15 +1,13 @@
 #include "printable.h"
 
 int main() {
-	Printable* printable = new PrintAsHTML("Hello, world!");
+	Printable* printable = new DataHTML("Hello, world!");
 	std::ofstream file("test.txt");
 
-	try {
-		saveTo(file, printable).asHTML();
-	}
-	catch (const std::exception& e) {
-		std::cout << e.what() << std::endl;
-	}
+	if(file.is_open())
+		saveTo(file, *printable);
+
+	file.close();
 
 	return 0;
 }
